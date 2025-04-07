@@ -15,7 +15,3 @@ def bonus_generate_random(nums: str) -> str:
         generate_num = "".join(random.choices(digits, k=20))
         resp_num = get_mask_account(generate_num)
     return resp_num
-
-
-print(bonus_generate_random("card"))
-print(bonus_generate_random("account"))
