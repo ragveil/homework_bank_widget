@@ -2,6 +2,7 @@ import random
 from string import digits
 
 from src.masks import get_mask_account, get_mask_card_number
+from src.widget import mask_account_card
 
 
 def bonus_generate_random(nums: str) -> str:
@@ -15,3 +16,9 @@ def bonus_generate_random(nums: str) -> str:
         generate_num = "".join(random.choices(digits, k=20))
         resp_num = get_mask_account(generate_num)
     return resp_num
+
+
+print(bonus_generate_random("card"))
+print(bonus_generate_random("account"))
+print(mask_account_card("Visa Gold 5999414228426353"))
+print(mask_account_card("Счет 73654108430135874305"))
