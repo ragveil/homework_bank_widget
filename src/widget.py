@@ -5,9 +5,12 @@ from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(both: str) -> str:
-    """Принимает значение карты или счета в виде строки и возвращает замаскированное значение вида:
-    Тип карты ХХХХ ХХ** **** ХХХХ
-    Счет **ХХ"""
+    """
+    Маскирует данные банковских карт или счета.
+
+    :param both: Входящее значение в виде строки с текстом и номером карты или счета.
+    :return: Строка с использованием маски вида XXXX XX** **** XXXX или **ХХ.
+    """
     if card := re.search(r"(\s\d{16}$)", both):
         return f"{both[:card.start()]} {get_mask_card_number(card.group()[1:])}"
     elif account := re.search(r"(\s\d{20}$)", both):
@@ -17,5 +20,10 @@ def mask_account_card(both: str) -> str:
 
 
 def get_date(date: str) -> str:
-    """Принимает значение даты и времени в виде строки и возвращает корректную дату"""
+    """
+    Форматирование даты и времени в корректный вид.
+
+    :param date: Входящее значение в виде строки формата дата-время.
+    :return: Строка со значением даты формата день.месяц.год
+    """
     return datetime.fromisoformat(date).strftime("%d.%m.%Y")
