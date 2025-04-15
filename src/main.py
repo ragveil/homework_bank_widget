@@ -2,8 +2,8 @@ import random
 from string import digits
 from typing import Any
 
-from src.masks import get_mask_account, get_mask_card_number
-from src.widget import get_date, mask_account_card
+from masks import get_mask_account, get_mask_card_number
+from widget import get_date, mask_account_card
 
 CARD_VARIANTS = ("Maestro", "MasterCard", "Visa Classic", "Visa", "Visa Platinum", "Visa Gold", "МИР")
 TYPES_OF_NUMS = ("card", "account")
