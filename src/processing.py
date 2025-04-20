@@ -1,4 +1,7 @@
-def filter_by_state(list_of_dicts: list[dict[str, int | str]], state: str = "EXECUTED") -> list[dict[str, int | str]]:
+from typing import Any
+
+
+def filter_by_state(list_of_dicts: list[dict[str, Any]], state: str = "EXECUTED") -> list[dict[str, int | str]]:
     """
     Выводит данные в соответствии с состоянием.
     :param list_of_dicts: Входящее значение в виде списка словарей.
@@ -8,7 +11,7 @@ def filter_by_state(list_of_dicts: list[dict[str, int | str]], state: str = "EXE
     return list(filter(lambda d: d.get("state") == state, list_of_dicts))
 
 
-def sort_by_date(list_of_dicts: list[dict[str, str | int]], sort: bool = True) -> list[dict[str, str | int]] | None:
+def sort_by_date(list_of_dicts: list[dict[str, Any]], sort: bool = True) -> list[dict[str, str | int]] | None:
     """
     Сортирует операции в соответствующем порядке.
     :param list_of_dicts: Входящее значение в виде списка словарей.
