@@ -56,8 +56,8 @@ print(
 
 print(
     f"""Проверка работоспособности функций модуля processing в рамках третьей домашней работы:
-Фильтрация по состоянию
-{filter_by_state(banking_operations, 'CANCELED')}
-Сортировка даты
-{sort_by_date(banking_operations, False)}"""
+Фильтрация по состоянию по умолчанию: {filter_by_state(banking_operations)}
+Фильтрация по состоянию с использованием дополнительного аргумента: {filter_by_state(banking_operations, 'CANCELED')}
+Сортировка даты по умолчанию: {sort_by_date(banking_operations)}
+Сортировка даты с использованием дополнительного аргумента: {sort_by_date(banking_operations, False)}"""
 )
