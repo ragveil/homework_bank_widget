@@ -2,6 +2,17 @@
 Домашняя работа по второму модулю обучения. Данный проект будет дорабатываться с каждым новым заданием.
 
 ---
+
+## Установка
+1. Клонирование репозитория
+```
+git clone https://github.com/ragveil/homework_bank_widget.git
+```
+2. Установка зависимостей
+```
+poetry install
+```
+---
 ## Основной функционал
 Основной файл `main.py` служит для базовой проверки работы функций, а также содержит бонусный функционал для дополнительной проверки.
 
@@ -75,3 +86,28 @@ masked_account = bonus_generate_random(user_input)
 print(masked_account)  # Вывод: Счет **2366
 ```
 ---
+## Описание модуля `processing`
+Модуль `processing` предоставляет функции:
+`filter_by_state` для фильтрации банковских операций по состоянию;
+`sort_by_date` для сортировки банковских операций по дате.
+
+### Примеры использования модуля `processing`
+```python
+from src.processing import filter_by_state, sort_by_date
+
+# Фильтрация банковских операций
+banking_operations = [
+    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"}
+]
+filtered_operations = filter_by_state(banking_operations, state='CANCELED')
+print(filtered_operations)  # Вывод: [{"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"}]
+
+# Сортировка банковских операций по дате
+banking_operations = [
+    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"}
+]
+sorted_operations = sort_by_date(banking_operations)
+print(sorted_operations)  # Вывод: [{"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},{"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"}] 
+```
