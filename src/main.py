@@ -23,11 +23,11 @@ def bonus_generate_random(nums: str = "card") -> str:
     :param nums: Входящий тип запроса пользователя
     :return: Строка
     """
-    if nums in TYPES_OF_NUMS:
+    if nums.lower() in TYPES_OF_NUMS:
         x: Any = lambda len_nums: "".join(random.choices(digits, k=len_nums))
-        if nums == "card":
+        if nums.lower() == "card":
             return mask_account_card(f"{random.choice(CARD_VARIANTS)} {x(16)}")
-        elif nums == "account":
+        elif nums.lower() == "account":
             return mask_account_card(f"Счет {x(20)}")
     return "Некорректные данные"
 
