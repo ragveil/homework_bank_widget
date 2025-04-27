@@ -17,7 +17,7 @@ banking_operations = [
 ]
 
 
-def bonus_generate_random(nums: str = "card") -> str:
+def bonus_generate_random(nums: str) -> str:
     """
     Бонусная функция для дополнительной проверки функции mask_account_card из модуля widget и наработка навыка автора.
     :param nums: Входящий тип запроса пользователя
