@@ -9,7 +9,7 @@ from src.widget import get_date, mask_account_card
 CARD_VARIANTS = ("Maestro", "MasterCard", "Visa Classic", "Visa", "Visa Platinum", "Visa Gold", "МИР")
 TYPES_OF_NUMS = ("card", "account")
 
-banking_operations = [
+BANKING_OPERATIONS = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
     {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
     {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
@@ -56,8 +56,8 @@ print(
 
 print(
     f"""Проверка работоспособности функций модуля processing в рамках третьей домашней работы:
-Фильтрация по состоянию по умолчанию: {filter_by_state(banking_operations)}
-Фильтрация по состоянию с использованием дополнительного аргумента: {filter_by_state(banking_operations, 'CANCELED')}
-Сортировка даты по умолчанию: {sort_by_date(banking_operations)}
-Сортировка даты с использованием дополнительного аргумента: {sort_by_date(banking_operations, False)}"""
+Фильтрация по состоянию по умолчанию: {filter_by_state(BANKING_OPERATIONS)}
+Фильтрация по состоянию с использованием дополнительного аргумента: {filter_by_state(BANKING_OPERATIONS, 'CANCELED')}
+Сортировка даты по умолчанию: {sort_by_date(BANKING_OPERATIONS)}
+Сортировка даты с использованием дополнительного аргумента: {sort_by_date(BANKING_OPERATIONS, False)}"""
 )
