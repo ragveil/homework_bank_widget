@@ -1,3 +1,6 @@
+import re
+
+
 def get_mask_card_number(card: str) -> str:
     """
     Маскирует номер банковской карты.
@@ -5,7 +8,10 @@ def get_mask_card_number(card: str) -> str:
     :param card: Входящее значение в виде строки с номером карты.
     :return: Строка с использованием маски вида XXXX XX** **** XXXX
     """
-    return f"{card[0:4]} {card[4:6]}** **** {card[12:16]}"
+    if re.match(r"\d{16}$", card):
+        return f"{card[0:4]} {card[4:6]}** **** {card[12:16]}"
+    else:
+        return "Некорректный номер. Введите номер из 16 цифр без использования дополнительных символов."
 
 
 def get_mask_account(account: str) -> str:
@@ -15,5 +21,7 @@ def get_mask_account(account: str) -> str:
     :param account: Входящее значение в виде строки с номером счета.
     :return: Строка с использованием маски вида **XXXX
     """
-
-    return f"**{account[-4:]}"
+    if re.match(r"\d{20}$", account):
+        return f"**{account[-4:]}"
+    else:
+        return "Некорректный номер. Введите номер из 20 цифр без использования дополнительных символов."

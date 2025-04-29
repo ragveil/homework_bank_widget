@@ -14,9 +14,9 @@ def mask_account_card(both: str) -> str:
     if card := re.search(r"(\s\d{16}$)", both):
         return f"{both[:card.start()]} {get_mask_card_number(card.group()[1:])}"
     elif account := re.search(r"(\s\d{20}$)", both):
-        return f"{both[:account.start()]} {get_mask_account(account.group())}"
+        return f"{both[:account.start()]} {get_mask_account(account.group()[1:])}"
     else:
-        return ""
+        return "Некорректный номер."
 
 
 def get_date(date: str) -> str:
@@ -26,4 +26,7 @@ def get_date(date: str) -> str:
     :param date: Входящее значение в виде строки формата дата-время.
     :return: Строка со значением даты формата день.месяц.год
     """
-    return datetime.fromisoformat(date).strftime("%d.%m.%Y")
+    if re.match(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}", date):
+        return datetime.fromisoformat(date).strftime("%d.%m.%Y")
+    else:
+        return "Некорректный формат даты."
