@@ -3,10 +3,12 @@ from string import digits
 from typing import Any
 
 from src.constants import BANKING_OPERATIONS, CARD_VARIANTS, TRANSACTIONS, TYPES_OF_NUMS
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
+
+description_obj = transaction_descriptions(TRANSACTIONS)
 
 
 def bonus_generate_random(nums: str) -> str:
@@ -60,5 +62,12 @@ print(
 Пример работы итератора 'filter_by_currency':
 {next(filter_by_currency(TRANSACTIONS, 'USD'))}
 {next(filter_by_currency(TRANSACTIONS, 'rub'))}
+
+Пример работы генератора 'transaction_descriptions':
+{next(description_obj)}
+{next(description_obj)}
+{next(description_obj)}
+{next(description_obj)}
+{next(description_obj)}
 """
 )
