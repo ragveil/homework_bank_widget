@@ -3,7 +3,7 @@ from string import digits
 from typing import Any
 
 from src.constants import BANKING_OPERATIONS, CARD_VARIANTS, TRANSACTIONS, TYPES_OF_NUMS
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
@@ -69,5 +69,10 @@ print(
 {next(description_obj)}
 {next(description_obj)}
 {next(description_obj)}
+
+Пример работы генератора 'card_number_generator':
+{next(card_number_generator(123498, 123499))}
+{next(card_number_generator(1234567890123456, 1234567890123457))}
+{next(card_number_generator(9999999999999999, 10000000000000000))}
 """
 )
