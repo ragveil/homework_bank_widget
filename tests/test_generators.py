@@ -213,6 +213,11 @@ def test_transaction_descriptions_wrong(data: list[dict[str, Any]], expected: No
     assert next(transaction_descriptions(data)) == expected
 
 
+def test_transaction_descriptions_empty() -> None:
+    with pytest.raises(StopIteration):
+        next(transaction_descriptions([]))
+
+
 @pytest.mark.parametrize(
     "start, stop, expected",
     [
