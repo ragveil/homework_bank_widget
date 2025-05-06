@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Type
 
 import pytest
 
@@ -156,9 +156,16 @@ def test_filter_by_currency_correct(
 
 
 @pytest.mark.parametrize("curr, expected", [("", StopIteration), (" ", StopIteration), ("tyg", StopIteration)])
-def test_filter_by_currency_wrong(transaction_data: list[dict[str, Any]], curr: str, expected: str) -> None:
-    with pytest.raises(StopIteration):
+def test_filter_by_currency_wrong(
+    transaction_data: list[dict[str, Any]], curr: str, expected: Type[Exception]
+) -> None:
+    with pytest.raises(expected):
         next(filter_by_currency(transaction_data, curr))
+
+
+def test_filter_by_currency_empty_list() -> None:
+    with pytest.raises(StopIteration):
+        next(filter_by_currency([], "USD"))
 
 
 def test_transaction_descriptions_correct(transaction_data: list[dict[str, Any]]) -> None:
