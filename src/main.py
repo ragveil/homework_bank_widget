@@ -2,7 +2,8 @@ import random
 from string import digits
 from typing import Any
 
-from src.constants import BANKING_OPERATIONS, CARD_VARIANTS, TYPES_OF_NUMS
+from src.constants import BANKING_OPERATIONS, CARD_VARIANTS, TRANSACTIONS, TYPES_OF_NUMS
+from src.generators import filter_by_currency
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
@@ -52,4 +53,12 @@ print(
 Сортировка даты по умолчанию: {sort_by_date(BANKING_OPERATIONS)}
 Сортировка даты с использованием дополнительного аргумента: {sort_by_date(BANKING_OPERATIONS, False)}""",
     end="\n\n",
+)
+
+print(
+    f"""Проверка работоспособности функций модуля generators в рамках пятой домашней работы:
+Пример работы итератора 'filter_by_currency':
+{next(filter_by_currency(TRANSACTIONS, 'USD'))}
+{next(filter_by_currency(TRANSACTIONS, 'rub'))}
+"""
 )
