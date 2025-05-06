@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 @pytest.fixture
@@ -204,3 +204,21 @@ def test_transaction_descriptions_correct(transaction_data: list[dict[str, Any]]
 )
 def test_transaction_descriptions_wrong(data: list[dict[str, Any]], expected: None) -> None:
     assert next(transaction_descriptions(data)) == expected
+
+
+@pytest.mark.parametrize(
+    "start, stop, expected",
+    [
+        (9999999999999998, 10000000000000000, ["9999 9999 9999 9998", "9999 9999 9999 9999"]),
+        (123498, 123500, ["0000 0000 0012 3498", "0000 0000 0012 3499"]),
+        (1234567890123456, 1234567890123458, ["1234 5678 9012 3456", "1234 5678 9012 3457"]),
+    ],
+)
+def test_card_number_generator_correct(start: int, stop: int, expected: list[str]) -> None:
+    assert list(card_number_generator(start, stop)) == expected
+
+
+@pytest.mark.parametrize("start, stop", [(-2, 1), (5, 2), (5, 10000000000000001)])
+def test_card_number_generator_wrong(start: int, stop: int) -> None:
+    with pytest.raises(ValueError):
+        next(card_number_generator(start, stop))
