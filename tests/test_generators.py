@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 
 @pytest.fixture
@@ -159,3 +159,48 @@ def test_filter_by_currency_correct(
 def test_filter_by_currency_wrong(transaction_data: list[dict[str, Any]], curr: str, expected: str) -> None:
     with pytest.raises(StopIteration):
         next(filter_by_currency(transaction_data, curr))
+
+
+def test_transaction_descriptions_correct(transaction_data: list[dict[str, Any]]) -> None:
+    result = list(transaction_descriptions(transaction_data))
+    assert result == [
+        "Перевод организации",
+        "Перевод со счета на счет",
+        "Перевод со счета на счет",
+        "Перевод с карты на карту",
+        "Перевод организации",
+    ]
+
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        (
+            [
+                {
+                    "id": 939719570,
+                    "state": "EXECUTED",
+                    "date": "2018-06-30T02:08:58.425572",
+                    "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
+                    "descript": "Перевод организации",
+                    "from": "Счет 75106830613657916952",
+                    "to": "Счет 11776614605963066702",
+                }
+            ],
+            None,
+        ),
+        ([{}], None),
+        (
+            [
+                {
+                    "id": 939719570,
+                    "state": "EXECUTED",
+                    "date": "2018-06-30T02:08:58.425572",
+                }
+            ],
+            None,
+        ),
+    ],
+)
+def test_transaction_descriptions_wrong(data: list[dict[str, Any]], expected: None) -> None:
+    assert next(transaction_descriptions(data)) == expected
