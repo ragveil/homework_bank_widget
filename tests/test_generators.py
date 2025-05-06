@@ -166,6 +166,15 @@ def test_filter_by_currency_wrong(
 def test_filter_by_currency_empty_list() -> None:
     with pytest.raises(StopIteration):
         next(filter_by_currency([], "USD"))
+        next(filter_by_currency([{
+                    "id": 142264268,
+                    "state": "EXECUTED",
+                    "date": "2019-04-04T23:20:05.206878",
+                    "operationAmount": {"amount": "79114.93", "curr": {"name": "USD", "code": "USD"}},
+                    "description": "Перевод со счета на счет",
+                    "from": "Счет 19708645243227258542",
+                    "to": "Счет 75651667383060284188",
+                }], "USD"))
 
 
 def test_transaction_descriptions_correct(transaction_data: list[dict[str, Any]]) -> None:
@@ -230,7 +239,7 @@ def test_card_number_generator_correct(start: int, stop: int, expected: list[str
     assert list(card_number_generator(start, stop)) == expected
 
 
-@pytest.mark.parametrize("start, stop", [(-2, 1), (5, 2), (5, 10000000000000001)])
+@pytest.mark.parametrize("start, stop", [(-2, 1), (5, 2), (5, 100000000000000000)])
 def test_card_number_generator_wrong(start: int, stop: int) -> None:
     with pytest.raises(ValueError):
         next(card_number_generator(start, stop))
