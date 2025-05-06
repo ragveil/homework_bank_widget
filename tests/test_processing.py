@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import BANKING_OPERATIONS
+from src.constants import BANKING_OPERATIONS
 from src.processing import filter_by_state, sort_by_date
 
 WRONG_RESULT = "Неверный формат данных"
