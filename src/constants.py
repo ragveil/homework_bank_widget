@@ -1,3 +1,7 @@
+import os
+
+from config import ROOT_DIR
+
 CARD_VARIANTS = ("Maestro", "MasterCard", "Visa Classic", "Visa", "Visa Platinum", "Visa Gold", "МИР")
 TYPES_OF_NUMS = ("card", "account")
 
@@ -55,3 +59,5 @@ TRANSACTIONS = [
         "to": "Счет 14211924144426031657",
     },
 ]
+
+PATH_TO_LOGS = os.path.join(ROOT_DIR, "logs\\")
