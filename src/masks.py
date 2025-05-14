@@ -4,7 +4,6 @@ import re
 def get_mask_card_number(card: str) -> str:
     """
     Маскирует номер банковской карты.
-
     :param card: Входящее значение в виде строки с номером карты.
     :return: Строка с использованием маски вида XXXX XX** **** XXXX
     """
