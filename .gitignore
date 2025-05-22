@@ -53,3 +53,5 @@ cover/
 # PyCharm
 .idea/
 /.coverage
+/logs/masks.log
+/logs/utils.log
