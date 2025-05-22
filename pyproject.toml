@@ -8,6 +8,9 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "requests (>=2.32.3,<3.0.0)",
+    "python-dotenv (>=1.1.0,<2.0.0)",
+    "f (>=0.0.1,<0.0.2)"
 ]
 
 
@@ -26,6 +29,7 @@ isort = "^6.0.1"
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
 freezegun = "^1.5.1"
+pytest-mock = "^3.14.0"
 
 [tool.isort]
 line_length = 119
