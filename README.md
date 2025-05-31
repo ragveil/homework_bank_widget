@@ -168,6 +168,7 @@ my_function(1, 2) # Создает файл "mylog.txt" в папке logs пр�
 ## Описание модуля `utils`
 ---
 Модуль `utils` содержит функцию `get_transactions` для обработки JSON-файлов, включающих финансовые транзакции.
+
 Все функции модуля поддерживают ведение логов. Логи доступны в папке `logs` проекта.
 
 ### Пример использования модуля `utils`
@@ -175,6 +176,27 @@ my_function(1, 2) # Создает файл "mylog.txt" в папке logs пр�
 from src.utils import get_transactions
 transactions = get_transactions('data/operations.json')
 print(transactions) # Вывод списка словарей с данными о транзакциях.
+```
+---
+## Описание модуля `utils_alternate`
+---
+Модуль `utils_alternate` содержит функции:
+* `get_transactions_csv` для обработки CSV-файлов, включающих финансовые транзакции;
+* `get_transactions_xls` для обработки EXCEL-файлов, включающих финансовые транзакции.
+
+Все функции модуля поддерживают ведение логов. Логи доступны в папке `logs` проекта.
+
+### Примеры использования модуля `utils_alternate`
+```python
+from src.utils_alternate import get_transactions_csv, get_transactions_xls
+
+# Обработка CSV-файла
+transactions_csv = get_transactions_csv('data/transactions.csv')
+print(transactions_csv) # Вывод списка словарей с данными о транзакциях.
+
+# Обработка EXCEL-файла
+transactions_xls = get_transactions_xls('data/transactions_excel.xlsx')
+print(transactions_xls) # Вывод списка словарей с данными о транзакциях.
 ```
 ---
 ## Описание модуля `external_api`

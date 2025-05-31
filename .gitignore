@@ -55,3 +55,4 @@ cover/
 /.coverage
 /logs/masks.log
 /logs/utils.log
+/logs/utils_alternate.log
