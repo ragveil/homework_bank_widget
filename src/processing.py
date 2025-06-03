@@ -1,9 +1,9 @@
 from typing import Any
 
 
-def filter_by_state(list_of_dicts: list[dict[str, Any]], state: str = "EXECUTED") -> list[dict[str, int | str]] | str:
+def filter_by_state(list_of_dicts: list[dict[str, Any]], state: str = "EXECUTED") -> Any:
     """
-    Выводит данные в соответствии с состоянием.
+    Выводит данные в соответствии с состоянием операции.
     :param list_of_dicts: Входящее значение в виде списка словарей.
     :param state: Значение для фильтрации по умолчанию, строка.
     :return: Список словарей, соответствующих критерию фильтрации.
@@ -11,10 +11,15 @@ def filter_by_state(list_of_dicts: list[dict[str, Any]], state: str = "EXECUTED"
     if any(d.get("state") == state for d in list_of_dicts):
         return list(filter(lambda d: d.get("state") == state, list_of_dicts))
     else:
-        return "Неверный формат данных"
+        new_transactions = []
+        for d in list_of_dicts:
+            if len(d) != 0:
+                new_transactions.append(d)
+        print(f"Статус {state} отсутствует в списке транзакций. Возвращаю исходные транзакции.")
+        return new_transactions
 
 
-def sort_by_date(list_of_dicts: list[dict[str, Any]], sort: bool = True) -> list[dict[str, str | int]] | str:
+def sort_by_date(list_of_dicts: Any, sort: bool = True) -> Any:
     """
     Сортирует операции в соответствующем порядке.
     :param list_of_dicts: Входящее значение в виде списка словарей.

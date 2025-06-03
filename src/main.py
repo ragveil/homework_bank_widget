@@ -1,78 +1,123 @@
-import random
-from string import digits
-from typing import Any
+import os
+import time
 
-from src.constants import BANKING_OPERATIONS, CARD_VARIANTS, TRANSACTIONS, TYPES_OF_NUMS
-from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
-from src.masks import get_mask_account, get_mask_card_number
+from config import ROOT_DIR
+from src.advanced_func import search_item
+from src.generators import filter_by_currency
 from src.processing import filter_by_state, sort_by_date
+from src.utils import get_transactions
+from src.utils_alternate import get_transactions_csv, get_transactions_xls
 from src.widget import get_date, mask_account_card
 
-description_obj = transaction_descriptions(TRANSACTIONS)
+path_to_data = os.path.join(ROOT_DIR, "data")
+
+path_to_json = os.path.join(path_to_data, "operations.json")
+path_to_csv = os.path.join(path_to_data, "transactions.csv")
+path_to_xls = os.path.join(path_to_data, "transactions_excel.xlsx")
 
 
-def bonus_generate_random(nums: str) -> str:
+def main() -> str:  # pragma: no cover
     """
-    Бонусная функция для дополнительной проверки функции mask_account_card из модуля widget и наработка навыка автора.
-    :param nums: Входящий тип запроса пользователя
-    :return: Строка
+    Основная логика программы.
+    Собирает воедино основной функционал и предоставляет пользователю удобную функцию поиска и вывода транзакций.
+    :return: Сообщение об успешной отработке программы и ее завершении, строка.
     """
-    if nums.lower() in TYPES_OF_NUMS:
-        x: Any = lambda len_nums: "".join(random.choices(digits, k=len_nums))
-        if nums.lower() == "card":
-            return mask_account_card(f"{random.choice(CARD_VARIANTS)} {x(16)}")
-        elif nums.lower() == "account":
-            return mask_account_card(f"Счет {x(20)}")
-    return "Некорректные данные"
+    print("Привет! Добро пожаловать в программу работы с банковскими транзакциями. ")
+    print(
+        """Выберите необходимый пункт меню:
+1. Получить информацию о транзакциях из JSON-файла
+2. Получить информацию о транзакциях из CSV-файла
+3. Получить информацию о транзакциях из XLSX-файла"""
+    )
+    user_format = input()
+    while user_format not in ("1", "2", "3"):
+        user_format = input("Выберите подходящий пункт из меню")
+    if user_format == "1":
+        transactions = get_transactions(path_to_json)
+        print("Для обработки выбран JSON-файл.")
+    elif user_format == "2":
+        transactions = get_transactions_csv(path_to_csv)
+        print("Для обработки выбран CSV-файл.")
+    else:
+        transactions = get_transactions_xls(path_to_xls)
+        print("Для обработки выбран XLSX-файл.")
+    print("Введите статус, по которому необходимо выполнить фильтрацию.")
+    print("Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING")
+    user_status = input().upper()
+    while user_status not in ("EXECUTED", "CANCELED", "PENDING"):
+        user_status = input(f"Статус операции {user_status} недоступен").upper()
+    filtered_transactions = filter_by_state(transactions, user_status)
+    print("Отсортировать операции по дате? Да/Нет")
+    sort_choice = input().lower()
+    while sort_choice not in ("да", "нет"):
+        sort_choice = input('Введите "ДА" или "НЕТ" для выбора варианта').lower()
+    if sort_choice == "да":
+        print("Отсортировать по возрастанию или по убыванию?")
+        sort_settings = input().lower()
+        while sort_settings not in ("по возрастанию", "по убыванию"):
+            sort_settings = input('Выберите порядок сортировки "по убыванию"/"по возрастанию"').lower()
+        if sort_settings == "по возрастанию":
+            filtered_transactions = sort_by_date(filtered_transactions, False)
+        else:
+            filtered_transactions = sort_by_date(filtered_transactions)
+    print("Выводить только рублевые транзакции? Да/Нет")
+    rub_option = input().lower()
+    while rub_option not in ("да", "нет"):
+        rub_option = input('Введите "ДА" или "НЕТ" для выбора варианта').lower()
+    if rub_option == "да":
+        filtered_transactions = list(filter_by_currency(filtered_transactions, "RUB"))
+    print("Отфильтровать список транзакций по определенному слову в описании? Да/Нет")
+    filter_choice = input().lower()
+    while filter_choice not in ("да", "нет"):
+        filter_choice = input('Введите "ДА" или "НЕТ" для выбора варианта').lower()
+    if filter_choice == "да":
+        print("Введите ключевое слово для фильтрации")
+        keyword = input().lower()
+        filtered_transactions = search_item(filtered_transactions, keyword)
+    print("Распечатываю итоговый список транзакций", end="", flush=True)
+    for i in range(3):
+        time.sleep(1)
+        print(".", end="", flush=True)
+    print(f"Всего банковских операций в выборке: {len(filtered_transactions)}")
+    if len(filtered_transactions) != 0:
+        for transaction in filtered_transactions:
+            from_v = transaction.get("from")
+            to_v = transaction.get("to")
+            description = transaction.get("description")
+            amount_json = transaction.get("operationAmount", {}).get("amount")
+            curr_json = transaction.get("operationAmount", {}).get("currency", {}).get("name")
+            amount = transaction.get("amount")
+            curr = "руб." if transaction.get("currency_name") == "Ruble" else transaction.get("currency_name")
+            date = transaction.get("date")
+            if amount_json is None and description == "Открытие вклада":
+                result = f"{get_date(date)} {description}\n" f"{mask_account_card(to_v)}\n" f"Сумма: {amount} {curr}\n"
+                print(result)
+            elif amount_json is None and description != "Открытие вклада":
+                result = (
+                    f"{get_date(date)} {description}\n"
+                    f"{mask_account_card(from_v)} -> {mask_account_card(to_v)}\n"
+                    f"Сумма: {amount} {curr}\n"
+                )
+                print(result)
+            elif amount_json is not None and description == "Открытие вклада":
+                result = (
+                    f"{get_date(date)} {description}\n"
+                    f"{mask_account_card(to_v)}\n"
+                    f"Сумма: {amount_json} {curr_json}\n"
+                )
+                print(result)
+            elif amount_json is not None and description != "Открытие вклада":
+                result = (
+                    f"{get_date(date)} {description}\n"
+                    f"{mask_account_card(from_v)} -> {mask_account_card(to_v)}\n"
+                    f"Сумма: {amount_json} {curr_json}\n"
+                )
+                print(result)
+            else:
+                return "Мурлоки растащили код по своим норкам. Ох уж эти противные мурлоки!"
+    else:
+        print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+    return "Завершение работы программы."
 
 
-print(
-    f"""Проверка работы бонусной функции:
-Карта: {bonus_generate_random("card")}
-Счет: {bonus_generate_random("account")}""",
-    end="\n\n",
-)
-
-print(
-    f"""Проверки работоспособности функций модуля masks из первой домашней работы:
-Карта: {get_mask_card_number('7000792289606361')}
-Счет: {get_mask_account('73654108430135874305')}""",
-    end="\n\n",
-)
-
-print(
-    f"""Проверка работоспособности функций модуля widget в рамках второй домашней работы:
-Карта: {mask_account_card("Visa Gold 5999414228426353")}
-Счет: {mask_account_card("Счет 73654108430135874305")}
-Дата: {get_date("2024-03-11T02:26:18.671407")}""",
-    end="\n\n",
-)
-
-print(
-    f"""Проверка работоспособности функций модуля processing в рамках третьей домашней работы:
-Фильтрация по состоянию по умолчанию: {filter_by_state(BANKING_OPERATIONS)}
-Фильтрация по состоянию с использованием дополнительного аргумента: {filter_by_state(BANKING_OPERATIONS, 'CANCELED')}
-Сортировка даты по умолчанию: {sort_by_date(BANKING_OPERATIONS)}
-Сортировка даты с использованием дополнительного аргумента: {sort_by_date(BANKING_OPERATIONS, False)}""",
-    end="\n\n",
-)
-
-print(
-    f"""Проверка работоспособности функций модуля generators в рамках пятой домашней работы:
-Пример работы итератора 'filter_by_currency':
-{next(filter_by_currency(TRANSACTIONS, 'USD'))}
-{next(filter_by_currency(TRANSACTIONS, 'rub'))}
-
-Пример работы генератора 'transaction_descriptions':
-{next(description_obj)}
-{next(description_obj)}
-{next(description_obj)}
-{next(description_obj)}
-{next(description_obj)}
-
-Пример работы генератора 'card_number_generator':
-{next(card_number_generator(123498, 123499))}
-{next(card_number_generator(1234567890123456, 1234567890123457))}
-{next(card_number_generator(9999999999999999, 10000000000000000))}
-"""
-)
+print(main())

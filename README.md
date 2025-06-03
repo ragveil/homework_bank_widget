@@ -18,7 +18,7 @@ API_TOKEN=your_api_token_here
 ```
 ---
 ## Основной функционал
-Основной файл `main.py` служит для базовой проверки работы функций, а также содержит бонусный функционал для дополнительной проверки.
+Основной файл `main.py` содержит основную логику программы и объединяет работу остальных модулей проекта. 
 
 ---
 ## Описание модуля `masks`
@@ -217,27 +217,53 @@ amount_rubles = get_rub_transactions(usd)
 print(amount_rubles) # Вывод: 662846.295533
 ```
 ---
-## Описание бонусной функции `bonus_generate_random`
-Функция `bonus_generate_random` располагается в `main.py`, является результатом собственной инициативы и предназначена для тестирования работы модулей проекта.  
+## Описание модуля `advanced_func`
+Модуль `advanced_func` содержит функции:
+`search_item` для поиска транзакции по ключевому слову;
+`count_categories` для подсчета транзакций в соответствии с категориями.
 
-Функция:  
-* генерирует номера карт формата различных международных платежных систем, таких как "Visa", "MasterCard", "Maestro" и прочие;  
-* генерирует номера банковского счета;  
-* возвращает скрытые маской значения.
-
-### Примеры работы функции `bonus_generate_random`
+### Примеры использования модуля `advanced_func`
 ```python
-from src.main import bonus_generate_random
+from src.advanced_func import search_item, count_categories
 
-# Генерация и маскировка номера карты
-user_input = 'card'
-masked_card = bonus_generate_random(user_input)
-print(masked_card)  # Вывод: МИР 8547 33** **** 8359
+transactions = [
+    {
+        "id": 939719570,
+        "state": "EXECUTED",
+        "date": "2018-06-30T02:08:58.425572",
+        "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод организации",
+        "from": "Счет 75106830613657916952",
+        "to": "Счет 11776614605963066702",
+    },
+    {
+        "id": 142264268,
+        "state": "EXECUTED",
+        "date": "2019-04-04T23:20:05.206878",
+        "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод со счета на счет",
+        "from": "Счет 19708645243227258542",
+        "to": "Счет 75651667383060284188",
+    },
+    {
+        "id": 873106923,
+        "state": "EXECUTED",
+        "date": "2019-03-23T01:09:46.296404",
+        "operationAmount": {"amount": "43318.34", "currency": {"name": "руб.", "code": "RUB"}},
+        "description": "Перевод со счета на счет",
+        "from": "Счет 44812258784861134719",
+        "to": "Счет 74489636417521191160",
+    }]
 
-# Генерация и маскировка номера счета
-user_input = 'account'
-masked_account = bonus_generate_random(user_input)
-print(masked_account)  # Вывод: Счет **2366
+categories = ['Открытие вклада', 'Перевод организации']
+
+# Поиск транзакции по ключевому слову
+item_found = search_item(transactions, 'Перевод организации')
+print(item_found) # Вывод результата в виде списка словарей. 
+
+# Подсчет категорий транзакций
+categories_count = count_categories(transactions, categories)
+print(categories_count) # Вывод {'Перевод организации': 1}
 ```
 ---
 ## Тестирование функций

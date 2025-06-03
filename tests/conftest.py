@@ -244,3 +244,29 @@ def xls_out() -> list[dict[str, str | float]]:
             "to": "Discover 0720428384694643",
         },
     ]
+
+
+@pytest.fixture
+def maestro() -> list[dict[str, Any]]:
+    return [
+        {
+            "date": "2019-08-26T10:50:58.294041",
+            "description": "Перевод организации",
+            "from": "Maestro 1596837868705199",
+            "id": 441945886,
+            "operationAmount": {"amount": "31957.58", "currency": {"code": "RUB", "name": "руб."}},
+            "state": "EXECUTED",
+            "to": "Счет 64686473678894779589",
+        }
+    ]
+
+
+@pytest.fixture
+def categories() -> list[str]:
+    return [
+        "Открытие вклада",
+        "Перевод со счета на счет",
+        "Перевод организации",
+        "Перевод с карты на карту",
+        "Перевод с карты на счет",
+    ]
