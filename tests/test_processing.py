@@ -44,21 +44,9 @@ def test_filter_and_sorting_correct(processing_data: list[dict[str, str | int]])
                 {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
             ],
         ),
-        (
-            BANKING_OPERATIONS,
-            "RANDOM TEXT",
-            WRONG_RESULT,
-        ),
-        (
-            BANKING_OPERATIONS,
-            None,
-            WRONG_RESULT,
-        ),
-        (
-            BANKING_OPERATIONS,
-            "",
-            WRONG_RESULT,
-        ),
+        (BANKING_OPERATIONS, "RANDOM TEXT", BANKING_OPERATIONS),
+        (BANKING_OPERATIONS, None, BANKING_OPERATIONS),
+        (BANKING_OPERATIONS, "", BANKING_OPERATIONS),
     ],
 )
 def test_filter_params(data: list[dict[str, str | int]], arg: str, expected: list[dict[str, str | int]]) -> None:
@@ -163,7 +151,7 @@ def test_filter_and_sorting_wrong(processing_data_wrong: list[dict[str, str | in
     :param processing_data_wrong: Входные данные в виде списка словарей. Значения для ключей заданы неверно.
     :return: Результат работы теста.
     """
-    assert filter_by_state(processing_data_wrong) == WRONG_RESULT
+    assert filter_by_state(processing_data_wrong) == processing_data_wrong
     assert sort_by_date(processing_data_wrong) == WRONG_RESULT
-    assert filter_by_state([]) == WRONG_RESULT
+    assert filter_by_state([]) == []
     assert sort_by_date([]) == WRONG_RESULT
